@@ -26,13 +26,13 @@ var G_ThouchLayer = cc.Layer.extend({
 
         this.initBetOnObj();//初始化下注信息
 
-        this.initResultArea();//初始化结果显示区域
+        this.initResultArea();//初始化结果显示区域（骰子转动的部分）
 
-        this.initSelectArea();//初始化押号按钮区域
+        this.initSelectArea();//初始化押号按钮区域（1,2,3,4,5,6，大，小，单，双）
 
-        this.initBetArea();//初始化下注按钮区域
+        this.initBetArea();//初始化下注分值按钮区域（5,10，20,50,100）
 
-        this.initBottomArea();//初始化底部信息区域
+        this.initBottomArea();//初始化底部信息区域（押号、下注、赚取）
 
         this.initCrapsArea();//初始化骰子区域
 
@@ -47,26 +47,25 @@ var G_ThouchLayer = cc.Layer.extend({
 
     initResultArea: function () {
         this._offset = 200;//离中心的偏移量
-        this._result_bg = new cc.DrawNode();
-        var ltp = cc.p(this.WinSize.width / 2 - this._offset, this.WinSize.height - 100);
-        var rbp = cc.p(this.WinSize.width / 2 + this._offset, this.WinSize.height - 180);
-        this._result_bg.drawRect(ltp, rbp, cc.color(237, 60, 55));
+        this._result_bg = new cc.DrawNode();    //绘图类
+        var ltp = cc.p(this.WinSize.width / 2 - this._offset, this.WinSize.height - 100);  //设置矩形的左上角
+        var rbp = cc.p(this.WinSize.width / 2 + this._offset, this.WinSize.height - 180);  //设置矩形的右下角
+        this._result_bg.drawRect(ltp, rbp, cc.color(237, 60, 55)); //绘制矩形
         this._result_bg.setVisible(false);
         this.addChild(this._result_bg);
 
         //文字内容
-        this._text_pre = new cc.LabelTTF('本次开', 'Arial', 30);
+        this._text_pre = new cc.LabelTTF('本次开', 'Arial', 30);   //创建文字以及文字属性
         this._text_pre.attr({
             anchorX: 0,
             anchorY: 0.5
         });
-        this._text_pre.setPosition(this.WinSize.width / 2 - this._offset, this.WinSize.height - 140);
+        this._text_pre.setPosition(this.WinSize.width / 2 - this._offset, this.WinSize.height - 140);//设置文字的位置
         this._text_pre.setVisible(false);
         this.addChild(this._text_pre);
 
         var text_pre_wh = this._text_pre.getContentSize();//this._text_pre的宽高
         var text_pre_p = this._text_pre.getPosition();
-
 
         //骰子点数
         this._craps_result = new cc.Sprite(res.s_1to6, this.getRect(1));
@@ -229,7 +228,7 @@ var G_ThouchLayer = cc.Layer.extend({
     },
 
     initBottomArea: function () {
-        //背景
+        //先添加绿色背景
         this._bottomArea = new cc.Sprite(res.s_bottom_bg);
         this._bottomArea.attr({
             x: this.WinSize.width / 2,
