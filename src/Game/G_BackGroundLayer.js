@@ -1,5 +1,11 @@
 /**
  * Created by lkl on 2016/8/12.
+ * 加载背景图片
+ * 加载微信头像
+ * 加载微信昵称
+ * 加载我的烟豆
+ * 加载赚取烟豆
+ *
  */
 
 var BG_Object = null;
@@ -14,12 +20,15 @@ var G_BackGroundLayer = cc.Layer.extend({
         this.WinSize = cc.winSize;
         this.my_win_bean = 0;
 
+        //加载背景图片
         this.initBackGround();
+        //加载微信头像、微信昵称、我的烟豆、赚取烟豆
         this.initHeader();
 
         return true;
     },
 
+    //加载背景图片
     initBackGround : function() {
         this._bg = new cc.Sprite(res.S_bg);
         this._bg.attr({
@@ -30,6 +39,7 @@ var G_BackGroundLayer = cc.Layer.extend({
 
     },
 
+    //加载微信头像、微信昵称、我的烟豆、赚取烟豆
     initHeader : function() {
         /*this._Header_bg = new cc.DrawNode();
         var ltp = cc.p(0, this.WinSize.height);
@@ -37,17 +47,17 @@ var G_BackGroundLayer = cc.Layer.extend({
         this._Header_bg.drawRect(ltp, rbp, cc.color(233,158,57));
         this.addChild(this._Header_bg);*/
 
-
         var self = this;
-        //微信头像
+        //加载微信头像到背景图的某个位置
         cc.loader.loadImg(wx_info.imgUrl, {isCrossOrigin : false }, function(err, img)
         {
             self._Avatar = new cc.Sprite(img);
+            //设置精灵（图片）的锚点
             self._Avatar.attr({
                 anchorX : 0.5,
                 anchorY : 0.5
             });
-            self._Avatar.setPosition(73,70);
+            self._Avatar.setPosition(73,70);  //设置微信头像的位置
             self.addChild(self._Avatar);
 
         }.bind(this));
@@ -70,7 +80,6 @@ var G_BackGroundLayer = cc.Layer.extend({
         });
         this._mybean.setPosition(135,65);
         this.addChild(this._mybean);
-
         //总共赚取烟豆
         this._mywinbean = new cc.LabelTTF('赚取'+this.my_win_bean+'烟豆','Arial',20);
         this._mywinbean.attr({

@@ -90,7 +90,7 @@ class craps extends CI_Controller
 
 			if($my_YD < $sum){
 				$result = array('Code'=>-2,'Msg'=>'烟豆不足');
-                $this->addErrorLog(-2,'烟豆不足');//添加记录
+                $this->addErrorLog(-2,'烟豆不足');//添加记录到数据库
                 echo json_encode($result);
                 exit();
 			}

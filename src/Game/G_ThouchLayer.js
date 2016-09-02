@@ -10,8 +10,8 @@ var G_ThouchLayer = cc.Layer.extend({
     my_YD: null,//我的烟豆
     UI_YD: null,//UI显示的烟豆数
     ZQ_YD: 0,
-    show_xz: [],
-    show_zq: [],
+    show_xz: [],    //游戏底部下注数组
+    show_zq: [],    //游戏底部赚取数组
     isRun: false,
     isBetAgain: false,
 
@@ -19,7 +19,7 @@ var G_ThouchLayer = cc.Layer.extend({
         //////////////////////////////
         // 1. super init first
         this._super();
-        this.WinSize = cc.winSize;
+        this.WinSize = cc.winSize;  //获取当前游戏窗口大小
 
         this.my_YD = wx_info.total_gold;
         this.UI_YD = wx_info.total_gold;
@@ -34,7 +34,7 @@ var G_ThouchLayer = cc.Layer.extend({
 
         this.initBottomArea();//初始化底部信息区域（押号、下注、赚取）
 
-        this.initCrapsArea();//初始化骰子区域
+        this.initCrapsArea();//初始化骰子“开始游戏”区域
 
         this.schedule(this.updateShow, 0.5);
 
@@ -61,13 +61,15 @@ var G_ThouchLayer = cc.Layer.extend({
             anchorY: 0.5
         });
         this._text_pre.setPosition(this.WinSize.width / 2 - this._offset, this.WinSize.height - 140);//设置文字的位置
-        this._text_pre.setVisible(false);
+        this._text_pre.setVisible(false);   //设置节点是否可见：true可见，false不可见
         this.addChild(this._text_pre);
 
-        var text_pre_wh = this._text_pre.getContentSize();//this._text_pre的宽高
+        var text_pre_wh = this._text_pre.getContentSize();//this._text_pre的宽高；返回节点未变形状态下的大小（宽和高）。
         var text_pre_p = this._text_pre.getPosition();
 
         //骰子点数
+        //getRect():返回一个矩形区域
+        //Sprite(filename,rect):使用图片文件和指定的矩形区域创建一个 Sprite。
         this._craps_result = new cc.Sprite(res.s_1to6, this.getRect(1));
         this._craps_result.attr({
             x: text_pre_p.x + text_pre_wh.width + 5,
@@ -98,7 +100,7 @@ var G_ThouchLayer = cc.Layer.extend({
         var PositionY_L = this.WinSize.height - 50;
         var PositionY_R = this.WinSize.height - 50;
 
-
+        //创建图片菜单项cc.MenuItemImage对象
         this._select_1 = new cc.MenuItemImage(res.s_count1,res.s_count1, this.selectCallBack, this);
         this._select_1.attr({
             x: padding_left,
@@ -237,7 +239,7 @@ var G_ThouchLayer = cc.Layer.extend({
         });
         this.addChild(this._bottomArea);
 
-        var fontColor = new cc.Color(255, 255, 0);
+        var fontColor = new cc.Color(255, 255, 0);  //实列化颜色对象
         //押号
         var arr = ['押号', '1', '2', '3', '4', '5', '6', '大', '小','单','双'];
         var x_offset = 50;
@@ -249,7 +251,7 @@ var G_ThouchLayer = cc.Layer.extend({
                 anchorX: 0.5,
                 anchorY: 1
             });
-            _yh.setColor(fontColor);
+            _yh.setColor(fontColor);    //给_yh对象设置颜色
 
             this._bottomArea.addChild(_yh);
         }
@@ -289,7 +291,7 @@ var G_ThouchLayer = cc.Layer.extend({
     },
 
     initCrapsArea: function () {
-        this._startBTN = new cc.MenuItemFont('开始', this.startCallBack, this);
+        this._startBTN = new cc.MenuItemFont('开始', this.startCallBack, this);//创建cc.MenuItemFont菜单项对象
         this._startBTN.attr({
             x: this.WinSize.width / 2 + 100,
             y: 50
@@ -300,9 +302,9 @@ var G_ThouchLayer = cc.Layer.extend({
         this.addChild(this._startMenu);
 
         //骰子
-        cc.spriteFrameCache.addSpriteFrames(res.s_craps_plist);
+        cc.spriteFrameCache.addSpriteFrames(res.s_craps_plist);//缓存图片
 
-        this._craps = new cc.Sprite('#1.png');
+        this._craps = new cc.Sprite('#1.png');//把骰子点数为 1 的图片设置为精灵
         this._craps.attr({
             x: this.WinSize.width / 2,
             y: this.WinSize.height / 2 + 150
@@ -313,7 +315,7 @@ var G_ThouchLayer = cc.Layer.extend({
         var animation = new cc.Animation();
         for (var i = 1; i <= 6; i++) {
             var frameName = i + ".png";
-            var spriteFrame = cc.spriteFrameCache.getSpriteFrame(frameName);
+            var spriteFrame = cc.spriteFrameCache.getSpriteFrame(frameName);//创建精灵帧对象
             animation.addSpriteFrame(spriteFrame);
         }
 
@@ -392,7 +394,7 @@ var G_ThouchLayer = cc.Layer.extend({
                     if(this.isBetAgain){
                         this.UI_YD -= sum;
                     }
-                    self.resultAreaHide();
+                    self.resultAreaHide();//隐藏结果
                     cc.log(this.postData(this.bet_on_obj));
                     //发送下注信息到后台并返回结果
                     var xhr = cc.loader.getXMLHttpRequest();
@@ -409,6 +411,8 @@ var G_ThouchLayer = cc.Layer.extend({
 
                                         self.isBetAgain = true;//改变重复下注状态
                                         self.my_YD = self.UI_YD = response.My_YD;//更新烟豆信息
+                                        //initWithFile(filename,rect)使用指定图片文件的特定矩形区域初始化一个精灵。
+                                        //getRect():返回一个矩形区域
                                         self._craps_result.initWithFile(res.s_1to6, this.getRect(response.Count));
                                         var num = 0;
                                         for(var i in response.result){
@@ -474,17 +478,19 @@ var G_ThouchLayer = cc.Layer.extend({
             return false;
         }
 
+        //已经下注的烟豆总数
         var sum = 0;
         for (var i in this.bet_on_obj) {
             sum += this.bet_on_obj[i];
         }
-
+        //判断，若用户烟豆>=下注的总数
         if (this.my_YD >= sum + bet_num) {
             return true;
         }
         return false;
     },
 
+    //检查是否下注（只要检测到“下注数组”里面有某个 > 0 即认为已经下注）
     checkBetArr : function (obj) {
         var res = false;
         for(var i in obj){
@@ -539,7 +545,7 @@ var G_ThouchLayer = cc.Layer.extend({
         }
     },
 
-    //获取点数rect
+    //获取点数rect。rect(x,y,width,heigth)获取一个矩形区域
     getRect: function (num) {
         var num1 = parseInt(num);
         if (0 < num1 < 7) {
