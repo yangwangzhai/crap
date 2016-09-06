@@ -68,7 +68,7 @@ cc.game.onStart = function(){
             }
             //cc.audioEngine.setMusicVolume(0.5);
         }
-        cc.director.runScene(new GameScene());
+        cc.director.runScene(new GameScene());//加载或者切换场景
     }, this);
 };
 cc.game.run();

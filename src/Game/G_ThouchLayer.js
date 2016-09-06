@@ -36,7 +36,7 @@ var G_ThouchLayer = cc.Layer.extend({
 
         this.initCrapsArea();//初始化骰子“开始游戏”区域
 
-        this.schedule(this.updateShow, 0.5);
+        this.schedule(this.updateShow, 0.5);    //定时函数，每0.5秒执行一次updateShow函数
 
         return true;
     },
@@ -331,7 +331,6 @@ var G_ThouchLayer = cc.Layer.extend({
     selectCallBack: function (sender) {//押号选择回调函数
         if (this.curr_selected_OBJ != null) {
             this.curr_selected_OBJ.setColor(cc.color(255, 255, 255));
-
         }
 
         if (this.curr_bet_obj != null) {
@@ -360,11 +359,11 @@ var G_ThouchLayer = cc.Layer.extend({
 
             //下注逻辑
             if (this.checkYD(this.curr_bet_obj.bet_num)) {//检查烟豆是否够下注
-                this.bet_on_obj[this.curr_selected_OBJ.num] += this.curr_bet_obj.bet_num;
+                this.bet_on_obj[this.curr_selected_OBJ.num] += this.curr_bet_obj.bet_num;//把当前下注值存到bet_on_obj数组对象中
                 this.UI_YD -= this.curr_bet_obj.bet_num;
-                cc.log('bet_on_obj');
+                /*cc.log('bet_on_obj');
                 cc.log(this.bet_on_obj);
-                cc.log(this.UI_YD);
+                cc.log(this.UI_YD);*/
             } else {
                 alert('烟豆不足！');
             }
@@ -520,7 +519,7 @@ var G_ThouchLayer = cc.Layer.extend({
                 } else if (i == 10) {
                     index = 'double';
                 }
-                this.show_xz[i].setString(this.bet_on_obj[index]);
+                this.show_xz[i].setString(this.bet_on_obj[index]); //设置文本框中的文本
             }
 
         }
