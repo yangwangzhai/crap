@@ -19,8 +19,9 @@ var G_ThouchLayer = cc.Layer.extend({
         //////////////////////////////
         // 1. super init first
         this._super();
+        //this.WinSize = cc.director.getWinSize();  //获取当前游戏窗口大小
         this.WinSize = cc.winSize;  //获取当前游戏窗口大小
-
+        cc.log(this.WinSize);
         this.my_YD = wx_info.total_gold;
         this.UI_YD = wx_info.total_gold;
 
@@ -394,7 +395,6 @@ var G_ThouchLayer = cc.Layer.extend({
                         this.UI_YD -= sum;
                     }
                     self.resultAreaHide();//隐藏结果
-                    cc.log(this.postData(this.bet_on_obj));
                     //发送下注信息到后台并返回结果
                     var xhr = cc.loader.getXMLHttpRequest();
                     xhr.open("POST", "index.php?c=craps&m=betOn");
